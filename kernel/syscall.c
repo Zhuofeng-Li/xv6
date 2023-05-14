@@ -113,7 +113,6 @@ char *syscalls_name[] = {
 };
 
 int callnum = 0;  // record second arg not a system call number
-int numbit = 0; // record second arg bit
 
 void syscall(void) {
   int num;
@@ -129,7 +128,6 @@ void syscall(void) {
       argint(0, &pid);
       callnum = pid;
       if (1 | ((1 << num) == callnum)) { // first call itself
-        numbit = num; 
         sys_trace();
       }
       return;
