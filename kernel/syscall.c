@@ -106,7 +106,14 @@ static uint64 (*syscalls[])(void) = {
     [SYS_trace] sys_trace,
 };
 
-int callnum = 0;  // not a system call number
+char *syscalls_name[] = {
+    "fork",  "exit",   "wait",   "pipe",  "read",  "kill",   "exec", "fstat",
+    "chdir", "dup",    "getpid", "sbrk",  "sleep", "uptime", "open", "write",
+    "mknod", "unlink", "link",   "mkdir", "close", "trace"
+};
+
+int callnum = 0;  // record second arg not a system call number
+int numbit = 0; // record second arg bit
 
 void syscall(void) {
   int num;
@@ -122,6 +129,7 @@ void syscall(void) {
       argint(0, &pid);
       callnum = pid;
       if (1 | ((1 << num) == callnum)) { // first call itself
+        numbit = num; 
         sys_trace();
       }
       return;

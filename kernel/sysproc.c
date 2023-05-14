@@ -76,8 +76,15 @@ uint64 sys_uptime(void) {
   return xticks;
 }
 
+// print pid syscall name return value
+// proc pid num->string, a0
 uint64 sys_trace(void) {
-  extern int callnum;
-  printf("cal: %d", callnum);
+  extern int numbit;
+  extern char *syscalls_name[];
+
+  struct proc *p = myproc();
+
+  printf("%d: syscall %s", p->pid, syscalls_name[numbit - 1]);
   return 0;
+
 }
