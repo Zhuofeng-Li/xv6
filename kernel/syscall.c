@@ -106,6 +106,8 @@ static uint64 (*syscalls[])(void) = {
     [SYS_trace] sys_trace,
 };
 
+int callnum = 0;  // not a system call number
+
 void syscall(void) {
   int num;
   struct proc *p = myproc();
@@ -113,6 +115,18 @@ void syscall(void) {
   num = p->trapframe->a7;
 
   if (num > 0 && num < NELEM(syscalls) && syscalls[num]) {
+
+     // cache first system call number
+    if (num == SYS_trace) { // record callnum arg
+      int pid;
+      argint(0, &pid);
+      callnum = pid;
+      if (1 | ((1 << num) == callnum)) { // first call itself
+        sys_trace();
+      }
+      return;
+    }
+
     p->trapframe->a0 = syscalls[num]();
   } else {
     printf("%d %s: unknown sys call %d\n", p->pid, p->name, num);

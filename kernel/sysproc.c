@@ -77,5 +77,7 @@ uint64 sys_uptime(void) {
 }
 
 uint64 sys_trace(void) {
+  extern int callnum;
+  printf("cal: %d", callnum);
   return 0;
 }
