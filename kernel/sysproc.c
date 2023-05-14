@@ -82,6 +82,10 @@ uint64 sys_trace(void) {
   extern char *syscalls_name[];
 
   struct proc *p = myproc();
+  if (p->pid < 3) {
+    return 0;
+  }
+  
   int result = 0;
 
   if (p->trapframe->a7 != 22) {

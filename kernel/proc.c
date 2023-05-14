@@ -453,7 +453,7 @@ scheduler(void)
         // before jumping back to us.
         p->state = RUNNING;
         c->proc = p;
-        swtch(&c->context, &p->context);
+        swtch(&c->context, &p->context);  // convert reg to cpu
 
         // Process is done running for now.
         // It should have changed its p->state before coming back.
