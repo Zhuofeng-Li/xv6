@@ -57,7 +57,7 @@ kfree(void *pa)
   r = (struct run*)pa;
 
   acquire(&kmem.lock);
-  r->next = kmem.freelist;
+  r->next = kmem.freelist;  // ?why
   kmem.freelist = r;
   release(&kmem.lock);
 }
@@ -79,4 +79,8 @@ kalloc(void)
   if(r)
     memset((char*)r, 5, PGSIZE); // fill with junk
   return (void*)r;
+}
+
+uint64 get_freesize() {
+  return kmem.freelist - end + 4096;
 }
