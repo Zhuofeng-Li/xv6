@@ -87,6 +87,7 @@ uint64 sys_trace(void) {
   if (p->trapframe->a7 != 22) {
     result = p->trapframe->a0;
   }
+
   printf("%d: syscall %s -> %d\n", p->pid, syscalls_name[p->trapframe->a7 - 1], result);
   return 0;
 

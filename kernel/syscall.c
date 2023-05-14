@@ -127,13 +127,16 @@ void syscall(void) {
       int pid;
       argint(0, &pid);
       callnum = pid;
-      if (1 | ((1 << num) == callnum)) { // first call itself
+      if ((((1 << num) == callnum) || 2147483647 == callnum)) { // first call itself
         sys_trace();
       }
       return;
     }
 
     p->trapframe->a0 = syscalls[num]();
+    if ((callnum == 1 << num) || 2147483647 == callnum) {  // trace second arg
+      sys_trace();
+    }
   } else {
     printf("%d %s: unknown sys call %d\n", p->pid, p->name, num);
     p->trapframe->a0 = -1;
