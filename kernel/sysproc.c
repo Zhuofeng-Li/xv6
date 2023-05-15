@@ -105,7 +105,12 @@ uint64 sys_sysinfo(void) {
   uint64 memsize = get_freesize();
   uint64 pid = get_freepid();
   struct proc* proc = myproc();
-  copyout(proc->pagetable, p, (char *)&memsize, sizeof(memsize));
-  copyout(proc->pagetable, p, (char *)&pid, sizeof(pid));
+  if (copyout(proc->pagetable, p, (char *)&memsize, sizeof(memsize)) < 0) {
+    return -1;
+  }
+  proc = myproc();
+  if (copyout(proc->pagetable, p, (char *)&pid, sizeof(pid)) < 0) {
+    return -1;
+  }
   return 0;
 }
