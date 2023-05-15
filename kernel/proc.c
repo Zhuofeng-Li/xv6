@@ -654,3 +654,13 @@ procdump(void)
     printf("\n");
   }
 }
+
+uint64 get_freepid() {
+  struct proc *p;
+  for (p = proc; p < &proc[NPROC]; p++) {
+    if (UNUSED == p->state) {
+      return p->pid;
+    }
+  }
+  return -1;
+}

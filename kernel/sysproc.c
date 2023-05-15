@@ -97,6 +97,14 @@ uint64 sys_trace(void) {
 
 }
 
+
 uint64 sys_sysinfo(void) {
+  uint64 p;
+  if (argaddr(0, &p) < 0)
+    return -1;
+  uint64 memsize = get_freesize();
+  struct proc* proc = myproc();
+  copyout(proc->pagetable, p, (char *)&memsize, sizeof(memsize));
+  copyout(proc->pagetable, p, (char *)&memsize, sizeof(memsize));
   return 0;
 }
