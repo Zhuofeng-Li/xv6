@@ -103,8 +103,9 @@ uint64 sys_sysinfo(void) {
   if (argaddr(0, &p) < 0)
     return -1;
   uint64 memsize = get_freesize();
+  uint64 pid = get_freepid();
   struct proc* proc = myproc();
   copyout(proc->pagetable, p, (char *)&memsize, sizeof(memsize));
-  copyout(proc->pagetable, p, (char *)&memsize, sizeof(memsize));
+  copyout(proc->pagetable, p, (char *)&pid, sizeof(pid));
   return 0;
 }
