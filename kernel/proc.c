@@ -657,11 +657,11 @@ procdump(void)
 
 uint64 get_freepid() {
   struct proc *p;
+  int count = 0;
   for (p = proc; p < &proc[NPROC]; p++) {
-    if (UNUSED == p->state) {
-      return 3;
-      // return p->pid;
+    if (UNUSED != p->state) {
+      count++;
     }
   }
-  return -1;
+  return count;
 }

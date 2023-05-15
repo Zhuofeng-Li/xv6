@@ -8,10 +8,6 @@ void sinfo(struct sysinfo *info) {
     printf("FAIL: sysinfo failed");
     exit(1);
   }
-  
-  // test
-  printf("mem: %d", info->freemem);
-  printf("proc: %d", info->nproc);
 }
 
 //

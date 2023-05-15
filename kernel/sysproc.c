@@ -109,7 +109,7 @@ uint64 sys_sysinfo(void) {
     return -1;
   }
   proc = myproc();
-  if (copyout(proc->pagetable, p, (char *)&pid, sizeof(pid)) < 0) {
+  if (copyout(proc->pagetable, p + sizeof(uint64), (char *)&pid, sizeof(pid)) < 0) {
     return -1;
   }
   return 0;

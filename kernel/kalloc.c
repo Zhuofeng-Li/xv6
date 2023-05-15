@@ -84,6 +84,5 @@ uint64 get_freesize() {
     r = r->next;
   }
 
-  // return count * PGSIZE;
-  return 1;
+  return count * PGSIZE;
 }
