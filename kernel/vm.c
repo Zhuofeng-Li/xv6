@@ -407,5 +407,22 @@ void vmprint(pagetable_t pagetable) {
 // 1. loop i = 2 if valid print 2. recursive next page
 //  there are 2^9 = 512 PTEs in a page table.
 void vmhelper(pagetable_t pagetable, int count) {
-  return;
+  if (count == -1) {
+    return;
+  }
+
+  for (int i = 0; i < 512; i++) {
+    pte_t pte = pagetable[i];
+    if (pte & PTE_V) {
+      if (count == 2) {
+        printf("..");
+      } else if (count == 1) {
+        printf(".. ..");
+      } else if (count == 0) {
+        printf(".. .. ..");
+      }
+      printf("%d: pte %p pa %p\n", i, pte, PTE2PA(pte));
+      vmhelper((pagetable_t)(PTE2PA(pte)), count - 1);
+    }
+  }
 }
