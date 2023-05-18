@@ -127,6 +127,14 @@ found:
     return 0;
   }
 
+  struct usyscall *call;
+  // Allocate a usyscall page.
+  if((call = (struct usyscall *)kalloc()) == 0){
+    freeproc(p);
+    release(&p->lock);
+    return 0;
+  }
+
   // An empty user page table.
   p->pagetable = proc_pagetable(p);
   if(p->pagetable == 0){
@@ -195,6 +203,9 @@ proc_pagetable(struct proc *p)
     uvmfree(pagetable, 0);
     return 0;
   }
+
+ 
+
 
   return pagetable;
 }
