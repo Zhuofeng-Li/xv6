@@ -79,6 +79,7 @@ pte_t *walk(pagetable_t pagetable, uint64 va, int alloc) {
   for (int level = 2; level > 0; level--) {
     pte_t *pte = &pagetable[PX(level, va)];
     if (*pte & PTE_V) {
+      *pte = (*pte) | PTE_A;
       pagetable = (pagetable_t)PTE2PA(*pte);
     } else {
       if (!alloc || (pagetable = (pde_t *)kalloc()) == 0)
@@ -107,6 +108,7 @@ uint64 walkaddr(pagetable_t pagetable, uint64 va) {
     return 0;
   if ((*pte & PTE_U) == 0)
     return 0;
+  *pte = (*pte) | PTE_A;
   pa = PTE2PA(*pte);
   return pa;
 }
@@ -398,7 +400,7 @@ int copyinstr(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max) {
   }
 }
 
-//
+// print page table
 void vmprint(pagetable_t pagetable) {
   printf("page table %p\n", pagetable);
   vmhelper(pagetable, 2);
