@@ -83,13 +83,14 @@ int sys_pgaccess(void) {
     pte = walk(pagetable, a, 0);
     if (pte && (*pte & PTE_A)) { // walkaddr has set the pte_a
       mask = mask | (1 << ((a - va0) / PGSIZE));
-      *pte = (*pte) & (~PTE_A);
+      *pte = (*pte) & (0xffffffffffffffff & (~PTE_A));
     }
     if (a == last)
       break;
     a += PGSIZE;
   }
 
+  printf("mask %x", mask);
   if (copyout(pagetable, abits, (char *)&mask, sizeof(mask)) <
       0) // ? why use copyout instead of writing directly
     return -1;
