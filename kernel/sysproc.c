@@ -6,6 +6,9 @@
 #include "memlayout.h"
 #include "spinlock.h"
 #include "proc.h"
+
+void vmprint(pagetable_t pagetable);
+void vmhelper(pagetable_t pagetable, int count);
 pte_t *walk(pagetable_t pagetable, uint64 va, int alloc);
 
 uint64 sys_exit(void) {
@@ -67,9 +70,9 @@ int sys_pgaccess(void) {
   uint64 abits;
   if (argaddr(0, &va) < 0)
     return -1;
-  if (argint(0, &num) < 0)
+  if (argint(1, &num) < 0)
     return -1;
-  if (argaddr(0, &abits) < 0)
+  if (argaddr(2, &abits) < 0)
     return -1;
   pagetable_t pagetable = myproc()->pagetable;
 
@@ -83,14 +86,13 @@ int sys_pgaccess(void) {
     pte = walk(pagetable, a, 0);
     if (pte && (*pte & PTE_A)) { // walkaddr has set the pte_a
       mask = mask | (1 << ((a - va0) / PGSIZE));
-      *pte = (*pte) & (0xffffffffffffffff & (~PTE_A));
+      *pte = (*pte) & (~PTE_A);
     }
     if (a == last)
       break;
     a += PGSIZE;
   }
 
-  printf("mask %x", mask);
   if (copyout(pagetable, abits, (char *)&mask, sizeof(mask)) <
       0) // ? why use copyout instead of writing directly
     return -1;
