@@ -1,5 +1,5 @@
 # xv6
-xv6 lab1-lab3
+xv6 lab0-lab1
 **this is used for proving**
 ## lab0: 
 
